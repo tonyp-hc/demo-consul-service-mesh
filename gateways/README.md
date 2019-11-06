@@ -261,3 +261,34 @@ The full flow through the service mesh is as follows:
 * Mesh Gateway in DC2 forwards request to upstream Envoy for API service
 * Envoy sidecar for API service (payments v2) forwards request to API service which is only listening on localhost
 * API service receives request and sends response back through same chain
+
+
+## Clean up
+
+To stop and remove the containers and networks that you created you will run `docker-compose -f docker-compose-mesh.yml down`. 
+```shell
+$ docker-compose -f docker-compose-mesh.yml down
+Stopping gateways_web_envoy_1         ... done
+Stopping gateways_currency_proxy_1    ... done
+Stopping gateways_payments_proxy_v2_1 ... done
+Stopping gateways_web_1               ... done
+Stopping gateways_payments_v2_1       ... done
+Stopping gateways_gateway-dc1_1       ... done
+Stopping gateways_currency_dc1_1      ... done
+Stopping gateways_consul-dc2_1        ... done
+Stopping gateways_gateway-dc2_1       ... done
+Stopping gateways_consul-dc1_1        ... done
+Removing gateways_web_envoy_1         ... done
+Removing gateways_currency_proxy_1    ... done
+Removing gateways_payments_proxy_v2_1 ... done
+Removing gateways_web_1               ... done
+Removing gateways_payments_v2_1       ... done
+Removing gateways_gateway-dc1_1       ... done
+Removing gateways_currency_dc1_1      ... done
+Removing gateways_consul-dc2_1        ... done
+Removing gateways_gateway-dc2_1       ... done
+Removing gateways_consul-dc1_1        ... done
+Removing network gateways_dc1
+Removing network gateways_wan
+Removing network gateways_dc2
+```
