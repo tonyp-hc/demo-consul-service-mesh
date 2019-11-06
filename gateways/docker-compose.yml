@@ -3,7 +3,7 @@ services:
 
   consul-dc1:
     image: consul:1.6.0
-    command: ["consul","agent","-config-file=/config/consul-dc1.hcl"]
+    command: ["consul","agent","-config-file=/config/consul-dc1-nowan.hcl"]
     volumes:
       - "../consul_config:/config"
     ports:
@@ -73,10 +73,8 @@ services:
     command: [
       "consul",
       "connect", "envoy",
-      "-mesh-gateway",
       "-register",
       "-address", "10.5.0.5:443",
-      "-wan-address", "192.169.7.3:443",
       "--",
       "-l", "debug"]
     networks:
@@ -88,7 +86,7 @@ services:
  
   consul-dc2:
     image: consul:1.6.0
-    command: ["consul","agent","-config-file=/config/consul-dc2.hcl"]
+    command: ["consul","agent","-config-file=/config/consul-dc2-nowan.hcl"]
     volumes:
       - "../consul_config:/config"
     ports:
@@ -132,10 +130,8 @@ services:
     command: [
       "consul",
       "connect", "envoy",
-      "-mesh-gateway",
       "-register",
       "-address", "10.6.0.5:443",
-      "-wan-address", "192.169.7.5:443",
       "--",
       "-l", "debug"]
     networks:
