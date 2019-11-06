@@ -75,14 +75,16 @@ service {
 
 This can be applied in a number of ways:
 ```shell
+# If you had access to the consul agent, you could run:
 $ consul services register service_config/payments_v1.hcl
 
-# You can also use a JSON-encoded file and the HTTP API:
+# For this exercise, we will instead use a JSON-encoded file and Consul's API:
 $ curl http://localhost:8500/v1/config -XPUT -d @service_catalog/payments_v1.json
 ```
 
 ### Health Checks
 [Consul Health Checks Docs](https://www.consul.io/docs/agent/checks.html)
+
 Consul can run the following types of checks:
 * script
 * HTTP
@@ -100,7 +102,9 @@ $ curl -s localhost:8500/v1/catalog/nodes | jq '.[] | { Node: .Node }'
 {
   "Node": "954cba75abd3"
 }
+```
 
+```shell
 $ curl -s localhost:8500/v1/health/node/954cba75abd3 | jq
 [
   {
@@ -150,10 +154,12 @@ $ curl -s localhost:8500/v1/health/node/954cba75abd3 | jq
 ]
 ```
 
-#### List Checks for Service
+#### List Checks for Web Service 
 ```shell
 $ curl -s localhost:8500/v1/health/checks/web | jq
 []
+
+# Looks like there's nothing yet
 ```
 
 #### Register a HTTP check
@@ -189,6 +195,8 @@ Consul knows where these services are located because each service registers wit
 
 Using the payments service that was configured in this environment, we will query it a few different ways.
 
+
+
 ### Consul API
 The most flexible option, the Consul catalog exposes Datacenters, Nodes, Services, Nodes by Service, Services by Node, and many other combinations. The full spec is available in our [documentation](https://www.consul.io/api/catalog.html).
 
@@ -203,7 +211,7 @@ $ curl -s localhost:8500/v1/catalog/datacenters
 ["dc1"]
 ```
 
-##### List Nodes
+#### List Nodes
 | Method | Path |
 | ------------- | ------------- |
 | `GET`  | `/catalog/nodes` |
@@ -230,7 +238,7 @@ $ curl -s localhost:8500/v1/catalog/nodes | jq
 ]
 ```
 
-##### List Services 
+#### List Services 
 | Method | Path |
 | ------------- | ------------- |
 | `GET`  | `/catalog/services` |
@@ -251,7 +259,7 @@ $ curl -s localhost:8500/v1/catalog/services | jq
 }
 ```
 
-##### List Services by Node 
+#### List Services by Node 
 | Method | Path |
 | ------------- | ------------- |
 | `GET`  | `/catalog/service/:service` |
@@ -297,6 +305,8 @@ $ curl -s localhost:8500/v1/catalog/service/payments | jq
   }
 ]
 ```
+
+
  
 ### Consul DNS
 The DNS name for a service registered with Consul is `NAME.service.consul`, where `NAME` is the name you used to register the service (in this case, `payments`). By default, all DNS names are in the `consul` namespace, though this is configurable.
@@ -305,10 +315,14 @@ The DNS name for a service registered with Consul is `NAME.service.consul`, wher
 # TODO
 ```
 
+
+
 ### Consul Template (consul-template)
 [Full documentation](https://github.com/hashicorp/consul-template)
+
 [Releases](https://github.com/hashicorp/consul-template/releases)
-Quick Example
+
+#### Quick Example
 
 This short example assumes Consul is available locally.
 
@@ -317,22 +331,22 @@ This short example assumes Consul is available locally.
 $ consul agent -dev
 ```
 
-1. Author a template `in.tpl` to query the kv store:
+2. Author a template `in.tpl` to query the kv store:
 ```liquid
 {{ key "foo" }}
 ```
 
-1. Start Consul Template:
+3. Start Consul Template:
 ```shell
 $ consul-template -template "in.tpl:out.txt" -once
 ```
 
-1. Write data to the key in Consul:
+4. Write data to the key in Consul:
 ```shell
 $ consul kv put foo bar
 ```
 
-1. Observe Consul Template has written the file `out.txt`:
+5. Observe Consul Template has written the file `out.txt`:
 ```shell
 $ cat out.txt
 bar
@@ -341,11 +355,12 @@ bar
 For more examples and use cases, please see the [examples folder][https://github.com/hashicorp/consul-template/tree/master/examples].
 
 
+
+
 ## Clean up
 
 To stop and remove the containers and networks that you created you will run `docker-compose down`. 
 ```shell
-$ docker-compose down
 $ docker-compose down
 Stopping service_discovery_web_envoy_1         ... done
 Stopping service_discovery_payments_proxy_v1_1 ... done
