@@ -33,9 +33,9 @@ Attaching to traffic_splitting_payments_v1_1, traffic_splitting_web_1, traffic_s
 ```
 
 The following services will automatically start in your local Docker environment and register with Consul.
-Consul Server
-Web service with Envoy sidecar
-API service version 1 with Envoy sidecar
+* Consul Server
+* Web service with Envoy sidecar
+* API service version 1 with Envoy sidecar
 
 You can see Consul’s configuration in the `consul_config` folder, and the service definitions in the `service_config` folder.
 
