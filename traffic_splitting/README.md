@@ -247,7 +247,8 @@ $ consul config read -kind service-splitter -name api
 ### Configure Service Splitting - 50% Version 1, 50% Version 2
 Now that version 2 is running and registered, the next step is to gradually increase traffic to it by changing the weight of the v2 service subset in the service splitter configuration. Let’s increase the weight of the v2 service to 50%. Remember; total service weight must equal 100, so you also reduce the weight of the v1 subset to 50. The configuration file is already in your demo environment at `l7_config/api_service_splitter_50_50.json` and it looks like this.
 
-```json
+```shell
+$ cat l7_config/api_service_splitter_50_50.json
 {
   "kind": "service-splitter",
   "name": "api",
