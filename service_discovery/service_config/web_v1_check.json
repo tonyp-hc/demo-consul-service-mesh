@@ -1,0 +1,28 @@
+{
+  "ID": "web-v1",
+  "Name": "web",
+  "Port": 9090,
+  "Address": "10.5.0.3",
+  "Check": {
+    "ID": "web-v1-ping",
+    "Http": "http://10.5.0.3:9090",
+    "Interval": "10s"
+  },
+  "ServiceConnect": [{
+    "SidecarService": [{
+      "Check": {
+        "Interval": "10s",
+        "Name": "Connect Envoy Sidecar",
+        "Tcp": "10.5.0.3:20000"
+      },
+      "ServicePort": 20000,
+      "ServiceProxy": [{
+        "Upstreams": {
+          "DestinationServiceName": "payments",
+          "LocalBindAddress": "127.0.0.1",
+          "LocalBindPort": 9091
+        }
+      }]
+    }]
+  }]  
+}
