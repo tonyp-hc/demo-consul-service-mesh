@@ -164,7 +164,7 @@ $ curl -s localhost:8500/v1/health/checks/web | jq
 
 #### Register a HTTP check
 ```shell
-$ curl localhost:8500/v1/agent/service/register?replace-existing-checks=1 -XPUT --data @web_v1_check.json
+$ curl localhost:8500/v1/agent/service/register?replace-existing-checks=1 -XPUT --data @service_config/web_v1_check.json
 ```
 
 #### Check Again
