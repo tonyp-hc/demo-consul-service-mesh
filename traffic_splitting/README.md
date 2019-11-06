@@ -20,14 +20,16 @@ To deploy version 2 of your API service, you will:
 ## Starting the Demo Environment
 
 ```shell
+$ cd traffic_splitting
 $ docker-compose up
-
-Creating consul-demo-traffic-splitting_api_v1_1    ... done
-Creating consul-demo-traffic-splitting_consul_1 ... done
-Creating consul-demo-traffic-splitting_web_1    ... done
-Creating consul-demo-traffic-splitting_web_envoy_1    ... done
-Creating consul-demo-traffic-splitting_api_proxy_v1_1 ... done
-Attaching to consul-demo-traffic-splitting_consul_1, consul-demo-traffic-splitting_web_1, consul-demo-traffic-splitting_api_v1_1, consul-demo-traffic-splitting_web_envoy_1, consul-demo-traffic-splitting_api_proxy_v1_1
+Creating network "traffic_splitting_vpcbr" with driver "bridge"
+Creating traffic_splitting_consul_1            ... done
+Creating traffic_splitting_payments_v1_1 ... done
+Creating traffic_splitting_web_1               ... done
+Creating traffic_splitting_payments_proxy_v1_1 ... done
+Creating traffic_splitting_web_envoy_1         ... done
+Attaching to traffic_splitting_payments_v1_1, traffic_splitting_web_1, traffic_splitting_consul_1, traffic_splitting_payments_proxy_v1_1, traffic_splitting_web_envoy_1
+[ . . . ]
 ```
 
 The following services will automatically start in your local Docker environment and register with Consul.
@@ -45,18 +47,30 @@ Curl the Web endpoint to make sure that the whole application is running. You wi
 
 ```shell
 $ curl localhost:9090
-Hello World
-###Upstream Data: localhost:9091###
-  Service V1%
+{
+  "name": "web",
+  "type": "HTTP",
+  "duration": "29.3051ms",
+  "body": "Hello World",
+  "upstream_calls": [
+    {
+      "name": "payments-v1",
+      "uri": "http://localhost:9091",
+      "type": "HTTP",
+      "duration": "286.1µs",
+      "body": "PAYMENTS V1"
+    }
+  ]
+}
 ```
 
 Initially, you will want to deploy version 2 of the API service to production without sending any traffic to it, to make sure that it performs well in a new environment. Prevent traffic from flowing to version 2 when you register it, you will preemptively set up a  traffic split to send 100% of your traffic to version 1 of the API service, and 0% to the not-yet-deployed version 2. Splitting the traffic makes use of the new Layer 7 features built into Consul Service Mesh.
 
 ## Configuring Traffic Splitting
 Traffic Splitting uses configuration entries (introduced in Consul 1.5 and 1.6) to centrally configure the services and Envoy proxies. There are three configuration entries you need to create to enable traffic splitting:
-Service Defaults for the API service to set the protocol to HTTP.
-Service Splitter which defines the traffic split between the service subsets.
-Service Resolver which defines which service instances are version 1 and  2.
+1. Service Defaults for the API service to set the protocol to HTTP.
+2. Service Splitter which defines the traffic split between the service subsets.
+3. Service Resolver which defines which service instances are version 1 and  2.
 ### Configuring Service Defaults
 Traffic splitting requires that the upstream application uses HTTP, because splitting happens on layer 7 (on a request by request basis). You will tell Consul that your upstream service uses HTTP by setting the protocol in a “service defaults” configuration entry for the API service. This configuration is already in your demo environment at `l7_config/api_service_defaults.json`. It  looks like this.
 
