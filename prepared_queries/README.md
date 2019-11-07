@@ -7,10 +7,10 @@ When there are no more instances of a service available in the local datacenter,
 Failover policies are flexible and can be applied in a variety of ways including:
 * Fully static lists of alternate datacenters.
 * Fully dynamic policies that make use of Consul's [network coordinate](https://www.consul.io/docs/internals/coordinates.html) subsystem.
-* Automatically determine the next best datacenter to failover to based on network round trip time.
 
-Prepared queries can be made with policies specific to certain services and prepared query templates can allow one policy to apply to many, or even all services, with just a small number of templates.
+Prepared query templates can even allow one policy to apply to many, or even all services, with just a small number of templates.
 
+## Configuration Details
 We will be using the following features:
 * Private Network DC1
 * Private Network DC2
@@ -83,7 +83,7 @@ Applications can use this query in two ways:
 2. Queries can also be executed using the [prepared query execute API](https://www.consul.io/api/query.html#execute-prepared-query) for applications that can use Consul's API directly.
 
 ### Failover Policy Types
-Prepared queries can do more than metadata-based routing. They can provide geofailover to the next closest [federated](https://www.consul.io/docs/guides/datacenters.html) Consul datacenter, in order of increasing network round trip time.
+Prepared queries can do more than metadata-based routing. They can provide geofailover to the next closest [federated](https://www.consul.io/docs/guides/datacenters.html) Consul datacenter.
 
 Just like other prepared queries, it is transparent to applications. Failover policies have two optional fields which determine what happens if no healthy nodes are available in the local datacenter when the query is executed.
 
