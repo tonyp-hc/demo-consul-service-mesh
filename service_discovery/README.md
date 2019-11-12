@@ -75,10 +75,14 @@ service {
 
 This can be applied in a number of ways:
 ```shell
-# If you had access to the consul agent, you could run:
+# To use the CLI, you will need to ensure that the consul binary
+# is available on your $PATH and that it knows the HTTP API
+# address of your local consul agent (i.e., not the remote server)
+# This can be set using an environment variable like so:
+# export CONSUL_HTTP_ADDR=http://127.0.0.1:8500
 $ consul services register service_config/payments_v1.hcl
 
-# For this exercise, we will instead use a JSON-encoded file and Consul's API:
+# If you had a JSON-encoded file, you could POST it using the Consul API:
 $ curl http://localhost:8500/v1/config -XPUT -d @service_catalog/payments_v1.json
 ```
 
@@ -352,7 +356,7 @@ $ cat out.txt
 bar
 ```
 
-For more examples and use cases, please see the [examples folder][https://github.com/hashicorp/consul-template/tree/master/examples].
+For more examples and use cases, please see the [examples folder](https://github.com/hashicorp/consul-template/tree/master/examples).
 
 
 
