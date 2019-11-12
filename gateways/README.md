@@ -1,7 +1,9 @@
 # Gateways
 This demo highlights Consul Service Mesh gateways which allow cross cluster communication between services, for simplicity the demo connects applications direct to the Consul Server. The recommended architecture is to use a local Consul Client on each node.
 
-It consists of the following features:
+![](gateways/images/gateways.png)
+
+This consists of the following features:
 * Private Network DC1
 * Private Network DC2
 * WAN Network (Consul Server, Consul Gateway)
