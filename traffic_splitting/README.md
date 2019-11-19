@@ -73,13 +73,13 @@ Traffic Splitting uses configuration entries (introduced in Consul 1.5 and 1.6) 
 3. Service Resolver which defines which service instances are version 1 and  2.
 
 ### Configuring Service Defaults
-Traffic splitting requires that the upstream application uses HTTP, because splitting happens on layer 7 (on a request by request basis). You will tell Consul that your upstream service uses HTTP by setting the protocol in a “service defaults” configuration entry for the API service. This configuration is already in your demo environment at `l7_config/api_service_defaults.json`. It  looks like this.
+Traffic splitting requires that the upstream application uses HTTP, because splitting happens on layer 7 (on a request by request basis). You will tell Consul that your upstream service uses HTTP by setting the protocol in a “service defaults” configuration entry for the API service. This configuration is already in your demo environment at `l7_config/payments_service_defaults.json`. It  looks like this.
 
 ```shell
-$ cat l7_config/api_service_defaults.json
+$ cat l7_config/payments_service_defaults.json
 {
   "kind": "service-defaults",
-  "name": "api",
+  "name": "payments",
   "protocol": "http"
 }
 ```
@@ -89,7 +89,7 @@ The `kind` field denotes the type of configuration entry which you are defining;
 To apply the configuration, you can either use the Consul CLI or the API. In this example we’ll use the configuration entry endpoint of the HTTP API, which  is available at `http://localhost:8500/v1/config`. To apply the config, use a PUT operation in the following  command.
 
 ```shell
-$ curl localhost:8500/v1/config -XPUT -d @l7_config/api_service_defaults.json
+$ curl localhost:8500/v1/config -XPUT -d @l7_config/payments_service_defaults.json
 true
 ```
 
@@ -102,13 +102,13 @@ Service Resolvers allow you to filter for subsets of services based on informati
 
 The API service version 1 in the demo is already registered with the tags `v1` and service metadata `version:1`. When you register version 2 you will give it the tag `v2` and the metadata `version:2`. The `name` field is set to the name of the service in the Consul service catalog.
 
-The service resolver is already in your demo environment at `l7_config/api_service_resolver.json` and it looks like this.
+The service resolver is already in your demo environment at `l7_config/payments_service_resolver.json` and it looks like this.
 
 ```shell
-$ cat l7_config/api_service_resolver.json
+$ cat l7_config/payments_service_resolver.json
 {
   "kind": "service-resolver",
-  "name": "api",
+  "name": "payments",
 
   "subsets": {
     "v1": {
@@ -124,7 +124,7 @@ $ cat l7_config/api_service_resolver.json
 Apply the service resolver configuration entry using the same method you used in the previous example.
 
 ```shell
-$ curl localhost:8500/v1/config -XPUT -d @l7_config/api_service_resolver.json
+$ curl localhost:8500/v1/config -XPUT -d @l7_config/payments_service_resolver.json
 true 
 ```
 
@@ -143,13 +143,13 @@ In this example, there are only two splits. However, it is possible to configure
 
 For our initial split, we are going to configure all traffic to be directed to the service subset v1.
 
-The service splitter configuration already exists in your demo environment at `l7_config/api_service_splitter_100_0.json` and looks like this.  
+The service splitter configuration already exists in your demo environment at `l7_config/payments_service_splitter_100_0.json` and looks like this.  
 
 ```shell
-$ cat l7_config/api_service_splitter_100_0.json
+$ cat l7_config/payments_service_splitter_100_0.json
 {
   "kind": "service-splitter",
-  "name": "api",
+  "name": "payments",
   "splits": [
     {
       "weight": 100,
@@ -166,7 +166,7 @@ $ cat l7_config/api_service_splitter_100_0.json
 Apply this configuration entry by issuing another PUT request to the Consul’s configuration entry endpoint of the HTTP API.
 
 ```shell
-$ curl localhost:8500/v1/config -XPUT -d @l7_config/api_service_splitter_100_0.json
+$ curl localhost:8500/v1/config -XPUT -d @l7_config/payments_service_splitter_100_0.json
 true
 ``` 
 
@@ -205,7 +205,7 @@ $ curl -s localhost:8500/v1/config/service-splitter | jq
 [
   {
     "Kind": "service-splitter",
-    "Name": "api",
+    "Name": "payments",
     "Splits": [
       {
         "Weight": 100,
@@ -227,7 +227,7 @@ Or read from the CLI:
 $ consul config read -kind service-splitter -name api
 {
     "Kind": "service-splitter",
-    "Name": "api",
+    "Name": "payments",
     "Splits": [
         {
             "Weight": 100,
@@ -245,13 +245,13 @@ $ consul config read -kind service-splitter -name api
 
 
 ### Configure Service Splitting - 50% Version 1, 50% Version 2
-Now that version 2 is running and registered, the next step is to gradually increase traffic to it by changing the weight of the v2 service subset in the service splitter configuration. Let’s increase the weight of the v2 service to 50%. Remember; total service weight must equal 100, so you also reduce the weight of the v1 subset to 50. The configuration file is already in your demo environment at `l7_config/api_service_splitter_50_50.json` and it looks like this.
+Now that version 2 is running and registered, the next step is to gradually increase traffic to it by changing the weight of the v2 service subset in the service splitter configuration. Let’s increase the weight of the v2 service to 50%. Remember; total service weight must equal 100, so you also reduce the weight of the v1 subset to 50. The configuration file is already in your demo environment at `l7_config/payments_service_splitter_50_50.json` and it looks like this.
 
 ```shell
-$ cat l7_config/api_service_splitter_50_50.json
+$ cat l7_config/payments_service_splitter_50_50.json
 {
   "kind": "service-splitter",
-  "name": "api",
+  "name": "payments",
   "splits": [
     {
       "weight": 50,
@@ -268,7 +268,7 @@ $ cat l7_config/api_service_splitter_50_50.json
 Apply the configuration as before.
 
 ```shell
-$ curl localhost:8500/v1/config -XPUT -d @l7_config/api_service_splitter_50_50.json
+$ curl localhost:8500/v1/config -XPUT -d @l7_config/payments_service_splitter_50_50.json
 true
 ```
 
@@ -310,10 +310,10 @@ If you were actually performing a canary deployment you would want to choose a m
 Once you are confident that the new version of the service is operating correctly, you can send 100% of traffic to the version 2 subset. The configuration for a 100% split to version 2 looks like this.
 
 ```shell
-$ cat l7_config/api_service_splitter_0_100.json
+$ cat l7_config/payments_service_splitter_0_100.json
 {
   "kind": "service-splitter",
-  "name": "api",
+  "name": "payments",
   "splits": [
     {
       "weight": 0,
@@ -330,7 +330,7 @@ $ cat l7_config/api_service_splitter_0_100.json
 Apply it with a call to the HTTP API `config` endpoint as you did before.
 
 ```shell
-$ curl localhost:8500/v1/config -XPUT -d @l7_config/api_service_splitter_0_100.json
+$ curl localhost:8500/v1/config -XPUT -d @l7_config/payments_service_splitter_0_100.json
 true
 ```
 
