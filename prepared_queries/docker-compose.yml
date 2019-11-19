@@ -99,7 +99,7 @@ services:
       wan:
         ipv4_address: 192.169.7.4
 
-  # Define api service and envoy sidecar proxy for version 2 of the service
+  # Define Payments service and envoy sidecar proxy for version 2 of the service
   payments_v2:
     image: nicholasjackson/fake-service:v0.4.1
     environment:
@@ -116,7 +116,7 @@ services:
       CONSUL_HTTP_ADDR: 10.6.0.2:8500
       CONSUL_GRPC_ADDR: 10.6.0.2:8502
       SERVICE_CONFIG: /config/payments_v2.hcl
-      #  CENTRAL_CONFIG: "/central_config/api_service_resolver.hcl;/central_config/api_service_splitter_100_0.hcl"
+      #  CENTRAL_CONFIG: "/central_config/payments_service_resolver.hcl;/central_config/payments_service_splitter_100_0.hcl"
     volumes:
       - "./service_config:/config"
       - "./central_config:/central_config"
