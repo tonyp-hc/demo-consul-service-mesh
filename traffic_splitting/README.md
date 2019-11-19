@@ -389,27 +389,32 @@ First you’ll stop and remove the containers created for v2 of the API service.
 
 ```shell
 $ docker-compose -f docker-compose-v2.yml down
-Stopping consul-demo-traffic-splitting_api_proxy_v2_1 ... done
-Stopping consul-demo-traffic-splitting_api_v2_1       ... done
-WARNING: Found orphan containers (consul-demo-traffic-splitting_api_proxy_v1_1, consul-demo-traffic-splitting_web_envoy_1, consul-demo-traffic-splitting_consul_1, consul-demo-traffic-splitting_web_1, consul-demo-traffic-splitting_api_v1_1) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
-Removing consul-demo-traffic-splitting_api_proxy_v2_1 ... done
-Removing consul-demo-traffic-splitting_api_v2_1       ... done
-Network consul-demo-traffic-splitting_vpcbr is external, skipping
+$ docker-compose -f docker-compose-v2.yml down
+Stopping traffic_splitting_currency_proxy_1    ... done
+Stopping traffic_splitting_payments_proxy_v2_1 ... done
+Stopping traffic_splitting_payments_v2_1       ... done
+Stopping traffic_splitting_currency_1          ... done
+WARNING: Found orphan containers (traffic_splitting_web_envoy_1, traffic_splitting_payments_proxy_v1_1, traffic_splitting_consul_1, traffic_splitting_payments_v1_1, traffic_splitting_web_1) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+Removing traffic_splitting_currency_proxy_1    ... done
+Removing traffic_splitting_payments_proxy_v2_1 ... done
+Removing traffic_splitting_payments_v2_1       ... done
+Removing traffic_splitting_currency_1          ... done
+Network traffic_splitting_vpcbr is external, skipping
 ```
 
 Then, you’ll stop and remove the containers and the network that you created in the first docker compose command. 
 
 ```shell
 $ docker-compose down
-Stopping consul-demo-traffic-splitting_api_proxy_v1_1 ... done
-Stopping consul-demo-traffic-splitting_web_envoy_1    ... done
-Stopping consul-demo-traffic-splitting_consul_1       ... done
-Stopping consul-demo-traffic-splitting_web_1          ... done
-Stopping consul-demo-traffic-splitting_api_v1_1       ... done
-Removing consul-demo-traffic-splitting_api_proxy_v1_1 ... done
-Removing consul-demo-traffic-splitting_web_envoy_1    ... done
-Removing consul-demo-traffic-splitting_consul_1       ... done
-Removing consul-demo-traffic-splitting_web_1          ... done
-Removing consul-demo-traffic-splitting_api_v1_1       ... done
-Removing network consul-demo-traffic-splitting_vpcbr
+Stopping traffic_splitting_web_envoy_1         ... done
+Stopping traffic_splitting_payments_proxy_v1_1 ... done
+Stopping traffic_splitting_consul_1            ... done
+Stopping traffic_splitting_payments_v1_1       ... done
+Stopping traffic_splitting_web_1               ... done
+Removing traffic_splitting_web_envoy_1         ... done
+Removing traffic_splitting_payments_proxy_v1_1 ... done
+Removing traffic_splitting_consul_1            ... done
+Removing traffic_splitting_payments_v1_1       ... done
+Removing traffic_splitting_web_1               ... done
+Removing network traffic_splitting_vpcbr
 ```
