@@ -1,6 +1,6 @@
 {
   "kind": "service-resolver",
-  "name": "api",
+  "name": "payments",
 
   "subsets": {
     "v1": {

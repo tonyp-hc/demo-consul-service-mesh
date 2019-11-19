@@ -54,7 +54,7 @@ services:
       CONSUL_HTTP_ADDR: 10.5.0.2:8500
       CONSUL_GRPC_ADDR: 10.5.0.2:8502
       SERVICE_CONFIG: /config/payments_v1.hcl
-      #      CENTRAL_CONFIG: "/central_config/api_service_defaults.hcl"
+      #      CENTRAL_CONFIG: "/central_config/payments_service_defaults.hcl"
     volumes:
       - "./service_config:/config"
       - "./central_config:/central_config"

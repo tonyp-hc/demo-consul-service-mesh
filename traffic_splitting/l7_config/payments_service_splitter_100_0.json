@@ -1,6 +1,6 @@
 {
   "kind": "service-splitter",
-  "name": "api",
+  "name": "payments",
   "splits": [
     {
       "weight": 100,
