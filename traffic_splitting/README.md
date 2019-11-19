@@ -224,7 +224,7 @@ $ curl -s localhost:8500/v1/config/service-splitter | jq
 
 Or read from the CLI:
 ```shell
-$ consul config read -kind service-splitter -name api
+$ consul config read -kind service-splitter -name payments 
 {
     "Kind": "service-splitter",
     "Name": "payments",
